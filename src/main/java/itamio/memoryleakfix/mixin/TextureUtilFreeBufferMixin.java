@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
@@ -24,10 +25,10 @@ public abstract class TextureUtilFreeBufferMixin {
             at = @At(value = "INVOKE",
                     target = "Ljava/nio/channels/FileChannel;read(Ljava/nio/ByteBuffer;)I"),
             require = 0)
-    private int memoryLeakFix$readFileChannel(FileChannel channel, ByteBuffer byteBuffer) {
+    private int memoryLeakFix$readFileChannel(FileChannel channel, ByteBuffer byteBuffer) throws IOException {
         try {
             return channel.read(byteBuffer);
-        } catch (Exception e) {
+        } catch (IOException e) {
             MemoryUtil.memFree(byteBuffer);
             throw e;
         }
@@ -37,10 +38,10 @@ public abstract class TextureUtilFreeBufferMixin {
             at = @At(value = "INVOKE",
                     target = "Ljava/nio/channels/ReadableByteChannel;read(Ljava/nio/ByteBuffer;)I"),
             require = 0)
-    private int memoryLeakFix$readReadableChannel(ReadableByteChannel channel, ByteBuffer byteBuffer) {
+    private int memoryLeakFix$readReadableChannel(ReadableByteChannel channel, ByteBuffer byteBuffer) throws IOException {
         try {
             return channel.read(byteBuffer);
-        } catch (Exception e) {
+        } catch (IOException e) {
             MemoryUtil.memFree(byteBuffer);
             throw e;
         }
