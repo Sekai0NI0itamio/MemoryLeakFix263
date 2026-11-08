@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 env:
-  java_version: 25
+  java_version: 21
 
 jobs:
   runtime-test:
@@ -23,7 +23,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 25
+          java-version: 21
 
       - name: Set up Gradle caching
         uses: gradle/actions/setup-gradle@v4
@@ -44,13 +44,13 @@ jobs:
       - name: Run Minecraft 26.3 client (title screen + in-game world load)
         uses: headlesshq/mc-runtime-test@5.0.0
         with:
-          mc: 26.3
+          mc: 1.21.1
           modloader: fabric
           regex: .*fabric.*
           mc-runtime-test: fabric
-          java: 25
+          java: 21
           xvfb: "true"
-          fabric-api: 0.165.0
+          fabric-api: 0.116.15
           headlessmc-command: '--jvm "-DMcRuntimeGameTest=false"'
 
       - name: Upload runtime logs
