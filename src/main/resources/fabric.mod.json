@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "memoryleakfix263",
+  "version": "${version}",
+  "name": "Memory Leak Fix",
+  "description": "Fixes multiple memory leaks, both client-side and server-side. Unofficial port of Memory Leak Fix by FX (LGPL-2.1-only) for Minecraft 26.3 (Fabric). See NOTICE for credit.",
+  "authors": ["Itamio", "FX - PR0CESS"],
+  "contact": {
+    "homepage": "https://github.com/Sekai0NI0itamio/MemoryLeakFix263",
+    "sources": "https://github.com/fxmorin/memoryLeakFix",
+    "issues": "https://github.com/Sekai0NI0itamio/MemoryLeakFix263/issues"
+  },
+  "license": "LGPL-2.1-only",
+  "environment": "*",
+  "entrypoints": {"main": ["itamio.memoryleakfix.MemoryLeakFixMod"]},
+  "depends": {"fabricloader": ">=0.20.1", "minecraft": "~26.3", "java": ">=25", "fabric-api": "*"}
+}
