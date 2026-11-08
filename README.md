@@ -1,54 +1,61 @@
-# Memory Leak Fix — Modern Port for Minecraft 26.3 (Fabric)
+# Memory Leak Fix — Forge Port for Minecraft 1.20.1
 
-![Mod loader: Fabric](https://img.shields.io/badge/modloader-Fabric-1976d2?style=for-the-badge)
-![Minecraft: 26.3](https://img.shields.io/badge/Minecraft-26.3-green?style=for-the-badge)
+![Mod loader: Forge](https://img.shields.io/badge/modloader-Forge-orange?style=for-the-badge)
+![Minecraft: 1.20.1](https://img.shields.io/badge/Minecraft-1.20.1-green?style=for-the-badge)
 ![GitHub license](https://img.shields.io/github/license/Sekai0NI0itamio/MemoryLeakFix263?style=for-the-badge)
 
 **Fixes multiple memory leaks in Minecraft, both client-side and server-side.**
 
 The original Memory Leak Fix (38.8M downloads, FX) bundled a set of
-small fixes for known vanilla memory leaks. This is a **modern port
-for Minecraft 26.3 (Fabric)**.
+small fixes for known vanilla memory leaks. This is an unofficial
+**Forge port for Minecraft 1.20.1**, built and verified in CI via
+GitHub Actions, including a headless runtime test.
 
-> **Honest port status:** most of the original's fixes were absorbed
-> by Mojang in vanilla itself — the original's own notes say the
-> entity memories leak (MC-260605) was fixed by Mojang in 1.19.4,
-> and several other mixin targets (e.g. the old `TagKey` interner,
-> the non-static biome temperature `ThreadLocal`) no longer exist
-> in 26.3's rewritten systems. Rather than ship dead mixins that
-> crash on load, this port ships as a loadable mod that documents
-> that status (see below), verified by GitHub Actions including a
-> headless runtime test.
+### What it does (ported fixes)
 
-### Per-fix status (original → 26.3)
+- **Biome temperature cache** — shares one static `ThreadLocal`
+  temperature cache instead of one per `Biome` instance (the
+  original's non-static `ThreadLocal` created a cache per biome).
+- **TagKey interner (MC-248621)** — uses a weak interner for
+  `TagKey` so unused tag keys can be garbage collected instead of
+  being retained forever by a strong interner.
+- **Texture resource buffer (MC-226729)** — frees the off-heap
+  `ByteBuffer` allocated by `TextureUtil.readResource` when reading
+  a texture fails part-way.
+- **Crosshair target clear** — clears `Minecraft.crosshairPickEntity`
+  and `hitResult` at the start of each client tick so stale targets
+  do not pin entities between frames.
 
-| Original fix | 26.3 status |
+### Per-fix status (original → 1.20.1 Forge)
+
+| Original fix | 1.20.1 status |
 |---|---|
-| Entity memories leak (MC-260605) | Already fixed by Mojang in 1.19.4 |
-| TagKey interner leak (MC-248621) | Target class changed in 26.3, not ported |
-| Biome temperature ThreadLocal | Target rewritten, not ported |
-| Drowned navigation / screenshot / texture buffer leaks | Targets changed, not ported |
+| Biome temperature ThreadLocal | Ported (`BiomeThreadLocalMixin`) |
+| TagKey interner leak (MC-248621) | Ported against Mojang `net.minecraft.tags.TagKey` (`TagKeyInternerMixin`) |
+| TextureUtil free buffer (MC-226729) | Ported (`TextureUtilFreeBufferMixin`, `require = 0` so texture-internals drift can never break loading) |
+| Target entity clear | Ported; injects at head of `runTick(boolean)` since `updateScreenAndTick` takes a `Screen` in 1.20.1 (`MinecraftTargetClearMixin`) |
+| Entity memories leak (MC-260605) | Not ported — vanilla fixed it in 1.19.4 (per the original's own notes); the Brain/Entity/LivingEntity mixins would be no-ops |
+| Drowned navigation leak (MC-202246) | Not ported — original targeted 1.16.3–1.16.5 only; its `Drowned` navigation fields no longer exist in 1.20.1 |
+| Huge screenshot leak | Not ported — it needs MixinExtras local capture, which is not bundled in this Forge port; the method target also changed shape in 1.20.1 |
 
-If a leak resurfaces in 26.3, it can be re-ported against the new
-target with the diagnostic workflow used for the other ports.
+### Port changes vs. the original
 
-### Modern port notes (26.3)
-
-- Java 25 · Fabric Loader 0.20.1+ · Fabric API 0.165.0+26.3
-- Built and verified in CI via GitHub Actions, including a headless
-  runtime test that launches the client, joins a world, and quits cleanly
+- Forge `@Mod` entrypoint, `mods.toml`, and a plain-Mixin setup
+  (MixinExtras was not bundled; the ported mixins were rewritten
+  with plain `@Redirect`/`@Inject` and compile against official
+  Mojang mappings for 1.20.1).
+- Mixin config: `memoryleakfix.mixins.json` (minVersion 0.8,
+  JAVA_17, refmap), `pack.mcmeta` pack_format 15.
 
 ### Installation
 
-1. Install Fabric Loader for Minecraft 26.3
-2. Install Fabric API
-3. Drop `memoryleakfix263-*.jar` into your `mods` folder
+1. Install Forge 47.4.20 for Minecraft 1.20.1
+2. Drop `memoryleakfix-1.20.1-forge-*.jar` into your `mods` folder
 
 ### Original mod & credit
 
-This is an unofficial modern port by **Itamio** of **Memory Leak
-Fix** by **FX (PR0CESS)** — the original (38.8M downloads on
-Modrinth, last updated for 1.20.4) has not been updated to 26.3.
+This is an unofficial Forge port by **Itamio** of **Memory Leak
+Fix** by **FX (PR0CESS)**.
 
 - Original mod: https://modrinth.com/mod/memoryleakfix
 - Original source: https://github.com/fxmorin/memoryLeakFix
@@ -56,4 +63,4 @@ Modrinth, last updated for 1.20.4) has not been updated to 26.3.
 - License: LGPL-2.1-only — see `LICENSE`
 
 All credit for the original concept, design, and logic goes to FX.
-This port exists to bring it to Minecraft 26.3. See `NOTICE`.
+See `NOTICE`.

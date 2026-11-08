@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "itamio.memoryleakfix.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "BiomeThreadLocalMixin",
+    "TagKeyInternerMixin"
+  ],
+  "client": [
+    "TextureUtilFreeBufferMixin",
+    "MinecraftTargetClearMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "refmap": "memoryleakfix.refmap.json"
+}

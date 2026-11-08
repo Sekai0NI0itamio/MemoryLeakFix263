@@ -1,6 +1,6 @@
 NOTICE
 
-Memory Leak Fix (Itamio port for Minecraft 26.3)
+Memory Leak Fix (Itamio Forge port for Minecraft 1.20.1)
 
 This mod is an unofficial port of "Memory Leak Fix" by FX
 (https://github.com/fxmorin/memoryLeakFix, LGPL-2.1-only, 38.8M
@@ -8,13 +8,13 @@ downloads on Modrinth, max Minecraft 1.20.4).
 
 All credit for the original concept, design, and logic goes to FX.
 This port was created by Itamio to bring the mod to Minecraft
-26.3 (Fabric) because the original has not been updated to this
-version.
+1.20.1 (Forge).
 
 Itamio does not take credit for any of the original assets or logic.
-The code was updated to be compatible with Minecraft 26.3 (Fabric).
-Port status: most of the original's leak fixes were absorbed by
-Mojang in vanilla (the original's own notes state the entity
-memories leak MC-260605 was fixed by Mojang in 1.19.4), and
-several mixin targets no longer exist in 26.3. See README for the
-per-fix breakdown.
+The code was updated to be compatible with Minecraft 1.20.1 (Forge).
+Port status: biome temperature ThreadLocal, TagKey interner
+(MC-248621), TextureUtil free buffer (MC-226729), and crosshair
+target clear fixes were ported. The entity memories fix (MC-260605)
+was not ported because vanilla fixed it in 1.19.4, the drowned
+navigation fix targeted 1.16.3-1.16.5 only, and the huge screenshot
+fix needs MixinExtras. See README for the per-fix breakdown.

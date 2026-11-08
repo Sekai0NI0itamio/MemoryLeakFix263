@@ -1,0 +1,24 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="LGPL-2.1-only"
+
+[[mods]]
+modId="memoryleakfix"
+version="1.0.0"
+displayName="Memory Leak Fix"
+authors="Itamio, FX (PR0CESS)"
+description='''Fixes multiple memory leaks, both client-side and server-side. Unofficial Forge port of Memory Leak Fix by FX (LGPL-2.1-only).'''
+
+[[dependencies.memoryleakfix]]
+    modId="forge"
+    mandatory=true
+    versionRange="[47,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.memoryleakfix]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.20.1,1.21)"
+    ordering="NONE"
+    side="BOTH"
