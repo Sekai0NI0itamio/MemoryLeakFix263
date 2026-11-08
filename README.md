@@ -16,9 +16,6 @@ GitHub Actions, including a headless runtime test.
 - **Biome temperature cache** — shares one static `ThreadLocal`
   temperature cache instead of one per `Biome` instance (the
   original's non-static `ThreadLocal` created a cache per biome).
-- **TagKey interner (MC-248621)** — uses a weak interner for
-  `TagKey` so unused tag keys can be garbage collected instead of
-  being retained forever by a strong interner.
 - **Texture resource buffer (MC-226729)** — frees the off-heap
   `ByteBuffer` allocated by `TextureUtil.readResource` when reading
   a texture fails part-way.
@@ -31,7 +28,7 @@ GitHub Actions, including a headless runtime test.
 | Original fix | 1.20.1 status |
 |---|---|
 | Biome temperature ThreadLocal | Ported (`BiomeThreadLocalMixin`) |
-| TagKey interner leak (MC-248621) | Ported against Mojang `net.minecraft.tags.TagKey` (`TagKeyInternerMixin`) |
+| TagKey interner leak (MC-248621) | Not ported — `TagKey` was rewritten in 1.20.1 (its static interner shape changed), so the original's `<clinit>` redirector has no target; the fix is not applicable to 1.20.1 |
 | TextureUtil free buffer (MC-226729) | Ported (`TextureUtilFreeBufferMixin`, `require = 0` so texture-internals drift can never break loading) |
 | Target entity clear | Ported; injects at head of `runTick(boolean)` since `updateScreenAndTick` takes a `Screen` in 1.20.1 (`MinecraftTargetClearMixin`) |
 | Entity memories leak (MC-260605) | Not ported — vanilla fixed it in 1.19.4 (per the original's own notes); the Brain/Entity/LivingEntity mixins would be no-ops |

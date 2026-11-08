@@ -12,9 +12,10 @@ This port was created by Itamio to bring the mod to Minecraft
 
 Itamio does not take credit for any of the original assets or logic.
 The code was updated to be compatible with Minecraft 1.20.1 (Forge).
-Port status: biome temperature ThreadLocal, TagKey interner
-(MC-248621), TextureUtil free buffer (MC-226729), and crosshair
-target clear fixes were ported. The entity memories fix (MC-260605)
+Port status: biome temperature ThreadLocal, TextureUtil free
+buffer (MC-226729), and crosshair target clear fixes were ported.
+The TagKey interner fix (MC-248621) was not ported because TagKey
+was rewritten in 1.20.1. The entity memories fix (MC-260605)
 was not ported because vanilla fixed it in 1.19.4, the drowned
 navigation fix targeted 1.16.3-1.16.5 only, and the huge screenshot
 fix needs MixinExtras. See README for the per-fix breakdown.

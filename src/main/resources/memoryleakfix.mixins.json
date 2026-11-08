@@ -4,8 +4,7 @@
   "package": "itamio.memoryleakfix.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "BiomeThreadLocalMixin",
-    "TagKeyInternerMixin"
+    "BiomeThreadLocalMixin"
   ],
   "client": [
     "TextureUtilFreeBufferMixin",
